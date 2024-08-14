@@ -10,19 +10,30 @@ spec:
   template:
     metadata:
       labels:
-        app: blog-django 
+        app: blog-django
     spec:
       containers:
       - name: blog-django-container
         image: yegekucuk.azurecr.io/dev/blog-django:buildid
         ports:
         - containerPort: 8000
+        volumeMounts:
+        - mountPath: /usr/src/app/db
+          name: blog-django-storage
+          readOnly: false
+      imagePullSecrets:
+      - name: acr-pull-secret
+      volumes:
+      - name: blog-django-storage
+        persistentVolumeClaim:
+          claimName: blog-django-pvc
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: blog-django-service
 spec:
+  type: LoadBalancer
   selector:
     app: blog-django
   ports:
@@ -30,19 +41,14 @@ spec:
       port: 8000
       targetPort: 8000
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
-  name: blog-django-ingress
+    name: blog-django-pvc
 spec:
-  rules:
-  - host: yegekucuk.com
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: blog-django-service
-            port:
-              number: 8000
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: default
+  resources:
+    requests:
+      storage: 1Gi
