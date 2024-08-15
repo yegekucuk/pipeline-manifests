@@ -38,7 +38,7 @@ spec:
     app: blog-django
   ports:
     - protocol: TCP
-      port: 8000
+      port: 80
       targetPort: 8000
 ---
 apiVersion: v1
