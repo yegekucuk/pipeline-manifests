@@ -6,14 +6,14 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: label
+      app: labelName
   template:
     metadata:
       labels:
-        app: label
+        app: labelName
     spec:
       containers:
-      - name: label
+      - name: labelName
         image: imageName:buildid
         ports:
         - containerPort: cport
@@ -27,7 +27,7 @@ metadata:
   namespace: ns
 spec:
   selector:
-    app: label
+    app: labelName
   ports:
   - port:  out-port
     targetPort: cport
