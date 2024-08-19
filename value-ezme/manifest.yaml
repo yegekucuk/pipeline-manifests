@@ -1,40 +1,33 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: $(appName)
-  namespace: $(namespace)
+  name: deploy-name
+  namespace: ns
 spec:
   selector:
     matchLabels:
-      app: $(appName)
+      app: label
   template:
     metadata:
       labels:
-        app: $(appName)
+        app: label
     spec:
       containers:
-      - name: $(appName)
-        image: $(imageName)
+      - name: label
+        image: imageName:buildid
         ports:
-        - containerPort: $(containerPort)
-        resources:
-            requests:
-                memory: $(memoryRequest)
-                cpu: $(cpuRequest)
-            limits:
-                memory: $(memoryLimit)
-                cpu: $(cpuLimit)
+        - containerPort: cport
       imagePullSecrets:
-        -  name: $(imagePullSecretName)
+        -  name: pullsecret
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: $(appName)
-  namespace: $(namespace)
+  name: svc-name
+  namespace: ns
 spec:
   selector:
-    app: $(appName)
+    app: label
   ports:
-  - port:  $(servicePort)
-    targetPort: $(serviceTargetPort)
+  - port:  out-port
+    targetPort: cport
