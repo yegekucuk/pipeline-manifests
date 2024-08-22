@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: hello-world-container
-        image: hello-world:latest
+        image: yegekucuk2/helloworld:latest
         ports:
         - containerPort: 80
 ---
